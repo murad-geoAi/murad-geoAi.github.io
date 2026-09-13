@@ -1,0 +1,35 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Node (not used by this site, but keeps stray installs out)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Original, uncropped source photo — the cropped copies live in assets/img/
+IMG_*.jpg
+IMG_*.jpeg
