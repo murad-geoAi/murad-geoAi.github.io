@@ -2,19 +2,40 @@
    Golam Murad — personal site
    Plain CSS, no framework, no build step, system fonts only.
    Mobile-first: base styles are the narrow layout; media queries widen it.
+
+   Palette is ASCE's, taken from asce.org:
+     #253a6e  deep navy   — header block, headings
+     #059bd6  bright cyan — accent rules and underlines (never as text: 3.1:1)
+     #0273ba  medium blue — links and buttons
+     #1a1a1a  body text
+     #5f6a78  muted text
+     #f6f7f8 / #e5e8ec    light grays
+     #d9eaf5 / #c6e3f0    pale blue tints
+   Every text pairing used below is at or above 4.5:1.
    ========================================================================= */
 
 :root {
-  --fg:        #1a1a1a;   /* body text        — 16.1:1 on --bg */
-  --fg-muted:  #5c5c5c;   /* secondary text   —  6.6:1 on --bg */
-  --fg-faint:  #6e6e6e;   /* dates, meta      —  5.1:1 on --bg */
+  /* brand */
+  --navy:      #253a6e;   /* header block, h2       — 11.0:1 on white */
+  --navy-deep: #1b2c54;   /* header gradient foot                     */
+  --cyan:      #059bd6;   /* rules and underlines only — not text     */
+  --blue:      #0273ba;   /* links                  —  5.0:1 on white */
+  --blue-dark: #1d5389;   /* link hover             —  7.9:1 on white */
+
+  /* text */
+  --fg:        #1a1a1a;   /* body                   — 17.4:1 on white */
+  --fg-muted:  #5f6a78;   /* secondary              —  5.5:1 on white */
+  --on-navy:   #ffffff;   /* header text            — 11.0:1 on navy  */
+  --on-navy-2: #c6e3f0;   /* header secondary text  —  8.2:1 on navy  */
+
+  /* surfaces */
   --bg:        #ffffff;
-  --bg-soft:   #f6f6f4;   /* cards, pills, code blocks */
-  --rule:      #e2e2df;
-  --rule-firm: #cfcfca;
-  --accent:    #0b5c8a;   /* links            —  6.9:1 on --bg */
-  --accent-hi: #073f5f;   /* link hover       — 10.5:1 on --bg */
-  --focus:     #b4530a;   /* focus ring       —  4.8:1 on --bg */
+  --bg-soft:   #f6f7f8;   /* cards, pills, code blocks */
+  --bg-tint:   #d9eaf5;   /* pale blue wash            */
+  --rule:      #e5e8ec;
+  --rule-firm: #cfd6dd;
+
+  --focus:     #0273ba;   /* focus ring on white */
 
   --measure: 46rem;       /* readable column */
   --gutter:  1.25rem;
@@ -46,29 +67,45 @@ body {
 
 img { max-width: 100%; height: auto; display: block; }
 
+/* the sprite itself is never rendered */
+.sprite { display: none; }
+
 /* ------------------------------ typography ------------------------------ */
 
 h1, h2, h3 { line-height: 1.25; font-weight: 650; letter-spacing: -0.011em; margin: 0; }
 
 h1 { font-size: 1.75rem; }
+
 h2 {
   font-size: 1.0625rem;
-  font-weight: 650;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .09em;
-  color: var(--fg-muted);
+  color: var(--navy);
   padding-bottom: .5rem;
   border-bottom: 1px solid var(--rule);
   margin-bottom: 1.25rem;
+  position: relative;
 }
+/* short cyan tick under each section heading */
+h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 2.5rem;
+  height: 2px;
+  background: var(--cyan);
+}
+
 h3 { font-size: 1rem; }
 
 p { margin: 0 0 1rem; }
 p:last-child { margin-bottom: 0; }
 
-a { color: var(--accent); text-decoration: underline; text-underline-offset: .15em;
+a { color: var(--blue); text-decoration: underline; text-underline-offset: .15em;
     text-decoration-thickness: .06em; }
-a:hover { color: var(--accent-hi); text-decoration-thickness: .12em; }
+a:hover { color: var(--blue-dark); text-decoration-thickness: .12em; }
 
 :focus-visible {
   outline: 2px solid var(--focus);
@@ -97,16 +134,22 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   left: -9999px;
   top: 0;
   background: var(--bg);
-  color: var(--fg);
+  color: var(--navy);
   padding: .6rem 1rem;
   z-index: 20;
-  border: 1px solid var(--rule-firm);
+  border: 1px solid var(--navy);
 }
 .skip-link:focus { left: .5rem; top: .5rem; }
 
-/* ------------------------------- header ------------------------------- */
+/* ===================== header — the navy upper block ===================== */
 
-.site-header { padding-block: 2.5rem 1.75rem; }
+.site-header {
+  background: var(--navy);
+  background: linear-gradient(170deg, var(--navy) 0%, var(--navy-deep) 100%);
+  color: var(--on-navy);
+  padding-block: 2.5rem 2rem;
+  border-bottom: 3px solid var(--cyan);
+}
 
 .header-inner { display: flex; flex-direction: column; gap: 1.25rem; }
 
@@ -115,25 +158,56 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   height: 108px;
   border-radius: 50%;
   object-fit: cover;
-  background: var(--bg-soft);
+  background: var(--navy-deep);
+  border: 3px solid rgba(255, 255, 255, .85);
 }
 
-.header-text h1 { margin-bottom: .5rem; }
+.header-text h1 { margin-bottom: .5rem; color: var(--on-navy); }
 
 .tagline {
-  color: var(--fg-muted);
+  color: var(--on-navy-2);
   max-width: 34rem;
-  margin-bottom: .9rem;
+  margin-bottom: 1.1rem;
 }
 
+/* icon + label links */
 .links {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: .4rem 1rem;
+  gap: .5rem;
   margin: 0;
   padding: 0;
-  font-size: .9375rem;
+  font-size: .875rem;
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .3rem .65rem;
+  color: var(--on-navy);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, .4);
+  border-radius: 3px;
+  line-height: 1.4;
+}
+.links a:hover {
+  color: var(--navy);
+  background: var(--on-navy);
+  border-color: var(--on-navy);
+}
+.links a:focus-visible { outline-color: var(--on-navy); }
+
+.icon {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* ------------------------------- nav ------------------------------- */
@@ -142,9 +216,9 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(255, 255, 255, .94);
+  background: rgba(255, 255, 255, .95);
   backdrop-filter: saturate(1.4) blur(6px);
-  border-block: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
 }
 
 .site-nav ul {
@@ -164,12 +238,13 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   white-space: nowrap;
   padding: .7rem 0;
   font-size: .875rem;
+  font-weight: 500;
   color: var(--fg-muted);
   text-decoration: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
 }
-.site-nav a:hover { color: var(--fg); }
-.site-nav a[aria-current="true"] { color: var(--fg); border-bottom-color: var(--fg); }
+.site-nav a:hover { color: var(--navy); }
+.site-nav a[aria-current="true"] { color: var(--navy); border-bottom-color: var(--cyan); }
 
 /* ------------------------------- about ------------------------------- */
 
@@ -177,6 +252,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .interests { margin: 0; padding-left: 1.15rem; }
 .interests li { margin-bottom: .35rem; }
+.interests li::marker { color: var(--cyan); }
 .interests li:last-child { margin-bottom: 0; }
 
 .note { font-size: .875rem; color: var(--fg-muted); margin-top: -.4rem; margin-bottom: 1.1rem; }
@@ -193,10 +269,14 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border-bottom: 1px solid var(--rule);
 }
 .news-list li:last-child { border-bottom: 0; }
+/* `display: grid` above would otherwise beat the browser's [hidden] rule,
+   leaving the collapsed news items visible. */
+.news-list li[hidden] { display: none; }
 
 .news-date {
-  color: var(--fg-faint);
+  color: var(--navy);
   font-size: .8125rem;
+  font-weight: 650;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   padding-top: .15rem;
@@ -206,10 +286,12 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .pub-year {
   font-size: .8125rem;
-  font-weight: 650;
+  font-weight: 700;
   letter-spacing: .09em;
-  color: var(--fg-faint);
+  color: var(--navy);
   margin: 1.75rem 0 .5rem;
+  padding-left: .5rem;
+  border-left: 3px solid var(--cyan);
 }
 .pub-year:first-child { margin-top: 0; }
 
@@ -235,7 +317,9 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .pub-teaser.is-placeholder {
   display: grid;
   place-items: center;
-  color: var(--fg-faint);
+  background: var(--bg-tint);
+  border-color: #b9d7ea;
+  color: #2c5772;
   font-size: .75rem;
   letter-spacing: .04em;
   text-align: center;
@@ -243,8 +327,8 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 }
 
 .pub-title { font-size: 1rem; font-weight: 650; margin-bottom: .3rem; }
-.pub-title a { color: inherit; text-decoration: none; }
-.pub-title a:hover { color: var(--accent-hi); text-decoration: underline; }
+.pub-title a { color: var(--navy); text-decoration: none; }
+.pub-title a:hover { color: var(--blue); text-decoration: underline; }
 
 .pub-authors { font-size: .9375rem; color: var(--fg-muted); margin-bottom: .2rem; }
 .pub-authors .me { color: var(--fg); font-weight: 650; }
@@ -256,10 +340,10 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   font-size: .75rem;
   letter-spacing: .03em;
   padding: .1rem .45rem;
-  border: 1px solid var(--rule-firm);
+  border: 1px solid #b9d7ea;
   border-radius: 2px;
-  background: var(--bg-soft);
-  color: var(--fg-muted);
+  background: var(--bg-tint);
+  color: #1d4f6b;
   margin-left: .35rem;
   vertical-align: 1px;
 }
@@ -274,15 +358,18 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   font-size: .8125rem;
   line-height: 1.4;
   padding: .25rem .6rem;
-  color: var(--fg);
+  color: var(--blue);
   background: var(--bg);
   border: 1px solid var(--rule-firm);
   border-radius: 3px;
   text-decoration: none;
   cursor: pointer;
 }
-.btn:hover { background: var(--bg-soft); color: var(--fg); border-color: var(--fg-faint); }
-.btn[aria-expanded="true"] { background: var(--bg-soft); border-color: var(--fg-faint); }
+/* `display: inline-block` above would otherwise beat the browser's [hidden]
+   rule, leaving the news toggle visible when there is nothing to expand. */
+.btn[hidden] { display: none; }
+.btn:hover { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
+.btn[aria-expanded="true"] { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
 
 .toggle-more { margin-top: 1rem; }
 
@@ -293,6 +380,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   padding: .75rem .85rem;
   background: var(--bg-soft);
   border: 1px solid var(--rule);
+  border-left: 3px solid var(--cyan);
   border-radius: 3px;
   font-size: .9375rem;
 }
@@ -312,7 +400,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 }
 
 .copy-btn { margin-bottom: .5rem; }
-.copy-btn[data-copied="true"] { border-color: var(--accent); color: var(--accent); }
+.copy-btn[data-copied="true"] { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
 
 /* ------------------------------ open source ------------------------------ */
 
@@ -328,10 +416,11 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .repo {
   padding: .8rem .9rem;
   border: 1px solid var(--rule);
+  border-top: 3px solid var(--navy);
   border-radius: 4px;
   background: var(--bg);
 }
-.repo:hover { border-color: var(--rule-firm); background: var(--bg-soft); }
+.repo:hover { border-top-color: var(--cyan); background: var(--bg-soft); }
 
 .repo-head {
   display: flex;
@@ -351,7 +440,8 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .stars {
   font-size: .75rem;
-  color: var(--fg-faint);
+  color: var(--navy);
+  font-weight: 650;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -365,9 +455,9 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .skills dt {
   font-size: .8125rem;
-  font-weight: 650;
+  font-weight: 700;
   letter-spacing: .04em;
-  color: var(--fg-faint);
+  color: var(--navy);
   padding-top: .35rem;
 }
 .skills dd { margin: 0 0 .75rem; }
@@ -377,10 +467,10 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .pills li {
   font-size: .8125rem;
   padding: .12rem .5rem;
-  border: 1px solid var(--rule);
+  border: 1px solid #cfe2f0;
   border-radius: 2px;
-  background: var(--bg-soft);
-  color: var(--fg);
+  background: var(--bg-tint);
+  color: #1d4f6b;
 }
 
 /* ------------------------------- footer ------------------------------- */
@@ -388,17 +478,21 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .site-footer {
   margin-top: 1rem;
   padding-block: 1.5rem 2.5rem;
-  border-top: 1px solid var(--rule);
+  background: var(--navy);
+  color: var(--on-navy-2);
   font-size: .8125rem;
-  color: var(--fg-muted);
 }
 .site-footer p { margin: 0 0 .25rem; }
+.site-footer a { color: var(--on-navy); }
+.site-footer a:hover { color: var(--on-navy-2); }
+.site-footer a:focus-visible { outline-color: var(--on-navy); }
 
 /* ------------------------ no-JS fallback lists ------------------------ */
 
 .pub-fallback { margin: 0 0 1.5rem; padding-left: 1.15rem; }
 .pub-fallback li { margin-bottom: .9rem; }
-.pub-fallback strong { font-weight: 650; }
+.pub-fallback li::marker { color: var(--cyan); }
+.pub-fallback strong { font-weight: 650; color: var(--navy); }
 
 .plain { list-style: none; margin: 0; padding: 0; }
 
@@ -407,9 +501,9 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 @media (min-width: 48em) {
   :root { --gutter: 2rem; }
 
-  h1 { font-size: 2rem; }
+  h1 { font-size: 2.125rem; }
 
-  .site-header { padding-block: 3.5rem 2rem; }
+  .site-header { padding-block: 3.5rem 2.5rem; }
 
   .header-inner { flex-direction: row; align-items: flex-start; gap: 1.75rem; }
   .avatar { width: 132px; height: 132px; flex: 0 0 auto; }
@@ -421,7 +515,6 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
   /* publications: teaser on the left */
   .pub { grid-template-columns: 13rem 1fr; gap: 1.25rem; align-items: start; }
-  .pub-teaser { aspect-ratio: 4 / 3; }
 
   .repo-grid { grid-template-columns: 1fr 1fr; }
 
@@ -443,5 +536,8 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   .site-nav, .toggle-more, .pub-actions, .skip-link { display: none; }
   .panel[hidden] { display: block; }
   body { font-size: 11pt; color: #000; }
+  .site-header, .site-footer { background: none; color: #000; border: 0; }
+  .site-header h1, .tagline, .site-footer, .site-footer a { color: #000; }
+  .links a { border: 0; color: #000; }
   a { color: #000; text-decoration: underline; }
 }
