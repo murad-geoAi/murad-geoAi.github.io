@@ -433,7 +433,7 @@ const PUBLICATIONS = [
     const bibId = nextId('bibtex');
     const parts = [];
 
-    parts.push('<article class="pub">');
+    parts.push('<article class="pub" data-reveal>');
     parts.push(teaserMarkup(pub));
     parts.push('<div class="pub-body">');
 
@@ -597,6 +597,25 @@ const PUBLICATIONS = [
     sections.forEach(function (s) { observer.observe(s); });
   }
 
+  /* ------------------------------ reveal ------------------------------ */
+
+  function wireReveal() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+
+    document.querySelectorAll('[data-reveal]').forEach(function (el) {
+      observer.observe(el);
+    });
+  }
+
   /* ------------------------- GitHub star counts ------------------------- */
 
   function loadStars() {
@@ -625,6 +644,7 @@ const PUBLICATIONS = [
     renderPublications();
     wireToggles();
     wireNav();
+    wireReveal();
     loadStars();
   }
 
