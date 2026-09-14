@@ -98,8 +98,8 @@ const PUBLICATIONS = [
     authors: [ME, 'Md. Aftabur Rahman', 'Hideaki Yasuhara'],
     venue: 'EarthArXiv preprint',
     status: 'Under review at Canadian Geotechnical Journal',
-    teaser: null,
-    teaserAlt: '',
+    teaser: 'assets/img/teasers/sparsity-aware-lsm-rangamati-2026.jpg',
+    teaserAlt: 'Spatial sparsity-aware landslide susceptibility mapping figure for Rangamati, Bangladesh.',
     links: {
       paper: 'assets/papers/sparsity-aware-lsm-rangamati-2026.pdf',
       doi: 'https://doi.org/10.31223/X52J42',
@@ -141,8 +141,8 @@ const PUBLICATIONS = [
     authors: [ME, 'Shotabdy Chowdhury Srabony', 'Shafiq Mahmud', 'Md. Aftabur Rahman'],
     venue: 'EarthArXiv preprint',
     status: 'Preprint',
-    teaser: null,
-    teaserAlt: '',
+    teaser: 'assets/img/teasers/bayesian-lsm-chattogram-2026.jpg',
+    teaserAlt: 'Bayesian machine learning landslide susceptibility mapping figure for Chattogram, Bangladesh.',
     links: {
       paper: 'assets/papers/bayesian-lsm-chattogram-2026.pdf',
       doi: 'https://doi.org/10.31223/X55J40',
@@ -207,8 +207,8 @@ const PUBLICATIONS = [
     venue: '6th Annual Paper Meet of the Civil Engineering Division, Institution of Engineers, ' +
            'Bangladesh (APMCE 2026), Dhaka',
     status: 'Accepted at APMCE 2026',
-    teaser: null,
-    teaserAlt: '',
+    teaser: 'assets/img/teasers/stochastic-pinn-consolidation-apmce-2026.jpg',
+    teaserAlt: 'Stochastic physics-informed neural network for consolidation parameter estimation figure.',
     links: {
       paper: 'assets/papers/stochastic-pinn-consolidation-apmce-2026.pdf'
     },
@@ -247,8 +247,8 @@ const PUBLICATIONS = [
     authors: ['Shafiq Mahmud', ME, 'Md. Aftabur Rahman'],
     venue: 'EarthArXiv preprint',
     status: 'Preprint',
-    teaser: null,
-    teaserAlt: '',
+    teaser: 'assets/img/teasers/leakage-aware-flood-susceptibility-2026.jpg',
+    teaserAlt: 'Leakage-aware ensemble flood susceptibility mapping figure for the Greater Noakhali region, Bangladesh.',
     links: {
       paper: 'assets/papers/leakage-aware-flood-susceptibility-2026.pdf',
       code: 'https://github.com/murad-geoAi/ml_flood_susceptibility_mapping'
@@ -285,8 +285,8 @@ const PUBLICATIONS = [
     venue: 'International Conference on Civil Engineering Research &amp; Innovations (ICCERI 2025), ' +
            'RUET, Rajshahi, Bangladesh',
     status: null,
-    teaser: null,
-    teaserAlt: '',
+    teaser: 'assets/img/teasers/landslide-inventory-hotspot-icceri-2025.jpg',
+    teaserAlt: 'Landslide inventory and hotspot analysis map of the Chittagong Hill Tracts, Bangladesh.',
     links: {
       paper: 'assets/papers/landslide-inventory-hotspot-icceri-2025.pdf'
     },
@@ -322,8 +322,8 @@ const PUBLICATIONS = [
     venue: '8th International Conference on Engineering Research, Innovation and Education ' +
            '(ICERIE 2025), SUST, Sylhet, Bangladesh',
     status: null,
-    teaser: null,
-    teaserAlt: '',
+    teaser: 'assets/img/teasers/rangamati-dnn-lsm-icerie-2025.jpg',
+    teaserAlt: 'Deep learning landslide susceptibility map of Rangamati Hill District, Bangladesh.',
     links: {
       paper: 'assets/papers/rangamati-dnn-lsm-icerie-2025.pdf',
       code: 'https://github.com/murad-geoAi/DL_Application_for_Landslide_Susceptibility_Mapping'
