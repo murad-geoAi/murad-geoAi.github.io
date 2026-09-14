@@ -5,20 +5,24 @@
 
    Palette is ASCE's, taken from asce.org:
      #253a6e  deep navy   — header block, headings
-     #059bd6  bright cyan — accent rules and underlines (never as text: 3.1:1)
+     #059bd6  bright cyan — never as text (3.1:1)
+     #0489c2  dimmed cyan — accent rules/underlines on white (decorative only)
      #0273ba  medium blue — links and buttons
      #1a1a1a  body text
      #5f6a78  muted text
      #f6f7f8 / #e5e8ec    light grays
      #d9eaf5 / #c6e3f0    pale blue tints
+     #e8f2fa              card surface tint (fg 16.1:1, navy 10.2:1, blue 4.6:1)
    Every text pairing used below is at or above 4.5:1.
    ========================================================================= */
 
 :root {
   /* brand */
   --navy:      #253a6e;   /* header block, h2       — 11.0:1 on white */
+  --navy-mid:  #2f4a86;   /* header gradient midpoint                 */
   --navy-deep: #1b2c54;   /* header gradient foot                     */
   --cyan:      #059bd6;   /* rules and underlines only — not text     */
+  --cyan-dim:  #0489c2;   /* heading underline on white — decorative  */
   --blue:      #0273ba;   /* links                  —  5.0:1 on white */
   --blue-dark: #1d5389;   /* link hover             —  7.9:1 on white */
 
@@ -32,6 +36,7 @@
   --bg:        #ffffff;
   --bg-soft:   #f6f7f8;   /* cards, pills, code blocks */
   --bg-tint:   #d9eaf5;   /* pale blue wash            */
+  --blue-light: #e8f2fa;  /* card surface tint — fg 16.1:1, navy 10.2:1, blue 4.6:1 on it */
   --rule:      #e5e8ec;
   --rule-firm: #cfd6dd;
 
@@ -111,8 +116,8 @@ h2::after {
   left: 0;
   bottom: -1px;
   width: 2.5rem;
-  height: 2px;
-  background: var(--cyan);
+  height: 3px;
+  background: var(--cyan-dim);
 }
 
 h3 { font-size: 1rem; }
@@ -122,10 +127,10 @@ p:last-child { margin-bottom: 0; }
 
 a { color: var(--blue); text-decoration: underline; text-underline-offset: .15em;
     text-decoration-thickness: .06em; }
-a:hover { color: var(--blue-dark); text-decoration-thickness: .12em; }
+a:hover { color: var(--blue-dark); text-decoration-thickness: .14em; }
 
 :focus-visible {
-  outline: 2px solid var(--focus);
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -162,7 +167,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .site-header {
   background: var(--navy);
-  background: linear-gradient(170deg, var(--navy) 0%, var(--navy-deep) 100%);
+  background: linear-gradient(170deg, var(--navy) 0%, var(--navy-mid) 55%, var(--navy-deep) 100%);
   color: var(--on-navy);
   padding-block: 2.5rem 2rem;
   border-bottom: 3px solid var(--cyan);
@@ -260,8 +265,8 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   text-decoration: none;
   border-bottom: 3px solid transparent;
 }
-.site-nav a:hover { color: var(--navy); }
-.site-nav a[aria-current="true"] { color: var(--navy); border-bottom-color: var(--cyan); }
+.site-nav a:hover { color: var(--navy); border-bottom-color: var(--rule-firm); }
+.site-nav a[aria-current="true"] { color: var(--navy); border-bottom-color: var(--cyan-dim); }
 
 /* ------------------------------- about ------------------------------- */
 
@@ -308,7 +313,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   color: var(--navy);
   margin: 1.75rem 0 .5rem;
   padding-left: .5rem;
-  border-left: 3px solid var(--cyan);
+  border-left: 3px solid var(--cyan-dim);
 }
 .pub-year:first-child { margin-top: 0; }
 
@@ -395,9 +400,9 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .panel {
   margin-top: .7rem;
   padding: .75rem .85rem;
-  background: var(--bg-soft);
+  background: var(--blue-light);
   border: 1px solid var(--rule);
-  border-left: 3px solid var(--cyan);
+  border-left: 3px solid var(--cyan-dim);
   border-radius: 3px;
   font-size: .9375rem;
 }
@@ -435,9 +440,9 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border: 1px solid var(--rule);
   border-top: 3px solid var(--navy);
   border-radius: 4px;
-  background: var(--bg);
+  background: var(--blue-light);
 }
-.repo:hover { border-top-color: var(--cyan); background: var(--bg-soft); }
+.repo:hover { border-top-color: var(--cyan-dim); background: var(--bg-tint); }
 
 .repo-head {
   display: flex;
