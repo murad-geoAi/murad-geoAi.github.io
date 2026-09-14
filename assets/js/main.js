@@ -182,8 +182,8 @@ const PUBLICATIONS = [
     authors: [ME, 'Md. Aftabur Rahman', 'S. Das'],
     venue: 'Environmental Monitoring and Assessment',
     status: 'Under review at Environmental Monitoring and Assessment',
-    teaser: null,
-    teaserAlt: '',
+    teaser: 'assets/img/teasers/vegetation-dynamics-xai-2026.jpg',
+    teaserAlt: 'Explainable AI deep neural network figure for NDVI vegetation dynamics prediction, Chittagong Division, Bangladesh.',
     links: {
       code: 'https://github.com/murad-geoAi/Soft_Computing_for_NDVI_Prediction'
     },
