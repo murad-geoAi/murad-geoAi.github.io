@@ -642,6 +642,15 @@ const PUBLICATIONS = [
     }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
 
     sections.forEach(function (s) { observer.observe(s); });
+
+    // The last section is too short to reach the reading band, so mark it
+    // current once the page is scrolled to the bottom.
+    window.addEventListener('scroll', function () {
+      const doc = document.documentElement;
+      if (window.innerHeight + window.scrollY >= doc.scrollHeight - 2) {
+        setCurrent(sections[sections.length - 1].id);
+      }
+    }, { passive: true });
   }
 
   /* ------------------------------ reveal ------------------------------ */
