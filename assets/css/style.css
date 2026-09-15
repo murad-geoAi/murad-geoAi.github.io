@@ -47,6 +47,15 @@
 
   --focus:     #0273ba;   /* focus ring on white */
 
+  /* Water texture: static SVG turbulence, rendered once per tile, no request.
+     Body: pale blue ripples, alpha capped at .15 by the feFuncA table, over
+     --page. Darkest possible pixel is #eff6fa, where --blue is 4.62:1 and
+     --fg-muted 5.04:1. Header: white ripples capped at .08 over the navy
+     gradient; --on-navy-2 stays at or above 5.19:1. */
+  --page:      #f8fbfd;
+  --water-body: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cfilter id='w' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.003 0.009' numOctaves='2' seed='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.737 0 0 0 0 0.847 0 0 0 0 0.925 -4 0 0 0 1'/%3E%3CfeGaussianBlur stdDeviation='1.2'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0.15'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
+  --water-header: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='w' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.0025 0.008' numOctaves='2' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 -4 0 0 0 1'/%3E%3CfeGaussianBlur stdDeviation='1.5'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0.08'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
+
   --measure: 46rem;       /* readable column */
   --gutter:  1.25rem;
 
@@ -88,7 +97,9 @@ html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--bg);
+  background-color: var(--page);
+  background-image: var(--water-body);   /* scrolls with the page; `fixed` janks on iOS */
+  background-size: 800px 800px;
   color: var(--fg);
   font: 400 1rem/1.6 var(--sans);
   font-size: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
@@ -174,7 +185,8 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .site-header {
   background: var(--navy);
-  background: linear-gradient(170deg, var(--navy) 0%, var(--navy-mid) 55%, var(--navy-deep) 100%);
+  background: var(--water-header) 0 0 / 900px 900px,
+              linear-gradient(170deg, var(--navy) 0%, var(--navy-mid) 55%, var(--navy-deep) 100%);
   color: var(--on-navy);
   padding-block: 2.5rem 2rem;
   border-bottom: 3px solid var(--cyan);
@@ -248,7 +260,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(255, 255, 255, .95);
+  background: rgba(248, 251, 253, .95);   /* --page */
   backdrop-filter: saturate(1.4) blur(6px);
   border-bottom: 1px solid var(--rule);
 }
@@ -601,7 +613,7 @@ h2:has(+ .note) { margin-bottom: .85rem; }
 @media print {
   .site-nav, .toggle-more, .pub-actions, .skip-link { display: none; }
   .panel[hidden] { display: block; }
-  body { font-size: 11pt; color: #000; }
+  body { font-size: 11pt; color: #000; background: none; }
   .site-header, .site-footer { background: none; color: #000; border: 0; }
   .site-header h1, .tagline, .site-footer, .site-footer a { color: #000; }
   .links a { border: 0; color: #000; }
