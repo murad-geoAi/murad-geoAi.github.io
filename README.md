@@ -15,9 +15,11 @@ framework. What is in the repository is exactly what GitHub Pages serves.
 │   ├── css/style.css       all styling; CSS variables at the top
 │   ├── js/main.js          NEWS and PUBLICATIONS data + all interactions
 │   ├── img/
-│   │   ├── profile.jpg     600×600 profile photo (fallback)
-│   │   ├── profile.webp    600×600 profile photo (served first)
-│   │   └── teasers/        per-paper figures (optional)
+│   │   ├── avatar.webp     330×330 head-and-shoulders crop for the header (served first)
+│   │   ├── avatar.jpg      same crop (fallback)
+│   │   ├── profile.jpg     600×600 full photo, used as the social-preview image
+│   │   ├── favicon.svg
+│   │   └── teasers/        per-paper images: foo.jpg + foo-480.webp + foo-960.webp
 │   ├── papers/             PDFs linked from the Publications section
 │   └── cv/golam-murad-cv.pdf
 ├── README.md
@@ -51,7 +53,7 @@ they appear in array order — so put new papers at the top.
   authors: ['Some Coauthor', ME, 'Another Coauthor'],   // ME renders bold
   venue: 'Journal or conference name, location',
   status: 'Under review at Journal Name',   // or 'Preprint', 'Accepted at X', or null
-  teaser: 'assets/img/teasers/my-figure.webp',   // or null for a placeholder box
+  teaser: 'assets/img/teasers/my-figure.jpg',    // or null for a placeholder box
   teaserAlt: 'What the figure shows, for screen readers.',
   links: {
     paper: 'assets/papers/my-paper-2027.pdf',
@@ -78,8 +80,17 @@ Notes:
   poster, video, data`. Adding a new kind of link means adding it to the
   `LINK_LABELS` object.
 - Put the PDF in `assets/papers/` with a lowercase, hyphenated filename.
-- Put a teaser figure in `assets/img/teasers/`, roughly 1200px wide, 4:3. Without
-  one you get a neutral "Figure coming soon" box and the layout is unchanged.
+- Put a 16:9 teaser JPG in `assets/img/teasers/` **and** two resized WebP copies
+  beside it named `-480.webp` and `-960.webp` (e.g. `my-figure.jpg`,
+  `my-figure-480.webp`, `my-figure-960.webp`). Browsers load the WebP files, and
+  a missing one shows as a broken image. With Pillow installed:
+
+  ```
+  py -c "from PIL import Image as I; im=I.open('assets/img/teasers/my-figure.jpg'); [im.resize((w, round(im.height*w/im.width)), I.LANCZOS).save(f'assets/img/teasers/my-figure-{w}.webp', quality=78, method=6) for w in (480, 960)]"
+  ```
+
+  Teasers are captioned "Illustration". Without one you get a neutral "Figure
+  coming soon" box and the layout is unchanged.
 
 ## Add a news item
 
