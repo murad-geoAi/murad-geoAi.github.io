@@ -601,15 +601,22 @@ const PUBLICATIONS = [
 
   function wireReveal() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (!('IntersectionObserver' in window)) return;
+    if (!('IntersectionObserver' in window)) {
+      // CSS hides [data-reveal] under .js; with no observer, show everything now.
+      document.querySelectorAll('[data-reveal]').forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
 
+    // threshold 0: any sliver on screen counts, so a tall block can't stay hidden.
     const observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         entry.target.classList.add('is-visible');
         observer.unobserve(entry.target);
       });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0 });
 
     document.querySelectorAll('[data-reveal]').forEach(function (el) {
       observer.observe(el);
