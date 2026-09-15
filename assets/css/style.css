@@ -12,7 +12,8 @@
      #5f6a78  muted text
      #f6f7f8 / #e5e8ec    light grays
      #d9eaf5 / #c6e3f0    pale blue tints
-     #e8f2fa              card surface tint (fg 16.1:1, navy 10.2:1, blue 4.6:1)
+     #e8f2fa              card surface tint (fg 16.1:1, navy 10.2:1, blue-dark 7.0:1;
+                          medium blue is only 4.45:1 here — not for text)
    Every text pairing used below is at or above 4.5:1.
    ========================================================================= */
 
@@ -36,7 +37,11 @@
   --bg:        #ffffff;
   --bg-soft:   #f6f7f8;   /* cards, pills, code blocks */
   --bg-tint:   #d9eaf5;   /* pale blue wash            */
-  --blue-light: #e8f2fa;  /* card surface tint — fg 16.1:1, navy 10.2:1, blue 4.6:1 on it */
+  --blue-light: #e8f2fa;  /* card surface tint — fg 16.1:1, navy 10.2:1, blue-dark 7.0:1 (blue only 4.45:1) */
+  --tint-border:      #b9d7ea;  /* edge of tags and placeholders on --bg-tint */
+  --tint-border-soft: #cfe2f0;  /* edge of skill pills                        */
+  --on-tint:   #1d4f6b;   /* text on --bg-tint      —  7.2:1 */
+  --on-tint-2: #2c5772;   /* placeholder text       —  6.3:1 */
   --rule:      #e5e8ec;
   --rule-firm: #cfd6dd;
 
@@ -96,7 +101,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ------------------------------ typography ------------------------------ */
 
-h1, h2, h3 { line-height: 1.25; font-weight: 650; letter-spacing: -0.011em; margin: 0; }
+h1, h2, h3 { line-height: 1.25; font-weight: 600; letter-spacing: -0.011em; margin: 0; }
 
 h1 { font-size: 1.75rem; }
 
@@ -217,6 +222,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border: 1px solid rgba(255, 255, 255, .4);
   border-radius: 3px;
   line-height: 1.4;
+  min-height: 2.25rem;    /* thumb-sized on phones; reset at 48em */
 }
 .links a:hover {
   color: var(--navy);
@@ -291,7 +297,8 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .interests li::marker { color: var(--cyan); }
 .interests li:last-child { margin-bottom: 0; }
 
-.note { font-size: .875rem; color: var(--fg-muted); margin-top: -.4rem; margin-bottom: 1.1rem; }
+.note { font-size: .875rem; color: var(--fg-muted); margin-bottom: 1.1rem; }
+h2:has(+ .note) { margin-bottom: .85rem; }
 
 /* ------------------------------- news ------------------------------- */
 
@@ -312,7 +319,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .news-date {
   color: var(--navy);
   font-size: .8125rem;
-  font-weight: 650;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   padding-top: .15rem;
@@ -366,20 +373,20 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   display: grid;
   place-items: center;
   background: var(--bg-tint);
-  border-color: #b9d7ea;
-  color: #2c5772;
+  border-color: var(--tint-border);
+  color: var(--on-tint-2);
   font-size: .75rem;
   letter-spacing: .04em;
   text-align: center;
   padding: .5rem;
 }
 
-.pub-title { font-size: 1rem; font-weight: 650; margin-bottom: .3rem; }
+.pub-title { font-size: 1rem; font-weight: 600; margin-bottom: .3rem; }
 .pub-title a { color: var(--navy); text-decoration: none; }
 .pub-title a:hover { color: var(--blue); text-decoration: underline; }
 
 .pub-authors { font-size: .9375rem; color: var(--fg-muted); margin-bottom: .2rem; }
-.pub-authors .me { color: var(--fg); font-weight: 650; }
+.pub-authors .me { color: var(--fg); font-weight: 600; }
 
 /* flex so a wrapped status tag starts flush left instead of indented */
 .pub-venue { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .45rem;
@@ -390,10 +397,10 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   font-size: .75rem;
   letter-spacing: .03em;
   padding: .1rem .45rem;
-  border: 1px solid #b9d7ea;
+  border: 1px solid var(--tint-border);
   border-radius: 2px;
   background: var(--bg-tint);
-  color: #1d4f6b;
+  color: var(--on-tint);
 }
 
 /* ------------------------------- buttons ------------------------------- */
@@ -401,11 +408,13 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .pub-actions { display: flex; flex-wrap: wrap; gap: .4rem; }
 
 .btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;    /* thumb-sized on phones; reset at 48em */
   font: inherit;
   font-size: .8125rem;
   line-height: 1.4;
-  padding: .25rem .6rem;
+  padding: .25rem .7rem;
   color: var(--blue);
   background: var(--bg);
   border: 1px solid var(--rule-firm);
@@ -413,10 +422,11 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   text-decoration: none;
   cursor: pointer;
 }
-/* `display: inline-block` above would otherwise beat the browser's [hidden]
+/* `display: inline-flex` above would otherwise beat the browser's [hidden]
    rule, leaving the news toggle visible when there is nothing to expand. */
 .btn[hidden] { display: none; }
-.btn:hover { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
+/* hover is a light tint; solid navy is reserved for "open"/"copied" states */
+.btn:hover { background: var(--blue-light); color: var(--blue-dark); border-color: var(--blue); }
 .btn[aria-expanded="true"] { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
 
 .toggle-more { margin-top: 1rem; }
@@ -468,7 +478,8 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border-radius: 4px;
   background: var(--blue-light);
 }
-.repo:hover { border-top-color: var(--cyan-dim); background: var(--bg-tint); }
+/* border only: a --bg-tint background would drop .repo-desc to 4.46:1 */
+.repo:hover { border-top-color: var(--cyan-dim); }
 
 .repo-head {
   display: flex;
@@ -481,7 +492,8 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .repo-name {
   font-family: var(--mono);
   font-size: .8125rem;
-  overflow-wrap: anywhere;   /* last resort; <wbr> after - and _ gives the preferred breaks */
+  color: var(--blue-dark);   /* --blue is only 4.45:1 on the card tint */
+  overflow-wrap: anywhere;  /* last resort; <wbr> after - and _ gives the preferred breaks */
   text-decoration: none;
 }
 .repo-name:hover { text-decoration: underline; }
@@ -489,7 +501,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .stars {
   font-size: .75rem;
   color: var(--navy);
-  font-weight: 650;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -515,10 +527,10 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .pills li {
   font-size: .8125rem;
   padding: .12rem .5rem;
-  border: 1px solid #cfe2f0;
+  border: 1px solid var(--tint-border-soft);
   border-radius: 2px;
   background: var(--bg-tint);
-  color: #1d4f6b;
+  color: var(--on-tint);
 }
 
 /* ------------------------------- footer ------------------------------- */
@@ -540,7 +552,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .pub-fallback { margin: 0 0 1.5rem; padding-left: 1.15rem; }
 .pub-fallback li { margin-bottom: .9rem; }
 .pub-fallback li::marker { color: var(--cyan); }
-.pub-fallback strong { font-weight: 650; color: var(--navy); }
+.pub-fallback strong { font-weight: 600; color: var(--navy); }
 
 .plain { list-style: none; margin: 0; padding: 0; }
 
@@ -550,6 +562,9 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   :root { --gutter: 2rem; }
 
   h1 { font-size: 2.125rem; }
+  h2 { font-size: 1.125rem; }
+
+  .btn, .links a { min-height: 0; }
 
   .site-header { padding-block: 3.5rem 2.5rem; }
 
