@@ -408,10 +408,21 @@ const PUBLICATIONS = [
     }).join(', ');
   }
 
+  // Rendered widths: 22rem cap on mobile, 13rem column at 48em, 15rem at 80em.
+  const TEASER_SIZES = '(min-width: 80em) 15rem, (min-width: 48em) 13rem, 22rem';
+
   function teaserMarkup(pub) {
     if (pub.teaser) {
-      return '<img class="pub-teaser" src="' + esc(pub.teaser) + '" alt="' +
-             esc(pub.teaserAlt || '') + '" loading="lazy" decoding="async">';
+      // `foo.jpg` has resized siblings `foo-480.webp` and `foo-960.webp`
+      // (1376x768 sources, so 16:9). The JPG is only a fallback.
+      const base = pub.teaser.replace(/\.[a-z]+$/i, '');
+      return '<picture>' +
+               '<source type="image/webp" sizes="' + TEASER_SIZES + '" srcset="' +
+                 esc(base) + '-480.webp 480w, ' + esc(base) + '-960.webp 960w">' +
+               '<img class="pub-teaser" src="' + esc(pub.teaser) + '" alt="' +
+                 esc(pub.teaserAlt || '') + '" width="480" height="268" ' +
+                 'loading="lazy" decoding="async">' +
+             '</picture>';
     }
     // No figure yet: a labelled box that keeps the layout final.
     return '<div class="pub-teaser is-placeholder" aria-hidden="true">Figure<br>coming soon</div>';

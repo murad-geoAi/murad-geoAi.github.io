@@ -327,10 +327,11 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border-top: 1px solid var(--rule);
 }
 
+/* Teaser sources are 16:9; a different ratio here crops their edges. */
 .pub-teaser {
   width: 100%;
-  aspect-ratio: 4 / 3;
-  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  max-width: 22rem;       /* keeps it from becoming a full-width banner on phones */
   border: 1px solid var(--rule);
   border-radius: 3px;
   background: var(--bg-soft);
@@ -539,6 +540,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
   /* publications: teaser on the left */
   .pub { grid-template-columns: 13rem 1fr; gap: 1.25rem; align-items: start; }
+  .pub-teaser { max-width: 100%; }
 
   .repo-grid { grid-template-columns: 1fr 1fr; }
 
