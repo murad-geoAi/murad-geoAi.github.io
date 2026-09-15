@@ -80,7 +80,8 @@ const NEWS_VISIBLE = 6;   // how many entries show before "Show more"
                so it renders bold.
      venue     string
      status    optional — 'Preprint', 'Under review at X', 'Accepted at X'
-     teaser    optional — path to a figure, e.g. 'assets/img/teasers/foo.webp'.
+     teaser    optional — path to a 16:9 JPG, e.g. 'assets/img/teasers/foo.jpg',
+               with resized siblings foo-480.webp and foo-960.webp next to it.
                Leave null for a placeholder box.
      teaserAlt alt text for the teaser; required whenever `teaser` is set.
      links     optional — { paper, code, doi, arxiv, slides, ... }
@@ -99,7 +100,7 @@ const PUBLICATIONS = [
     venue: 'EarthArXiv preprint',
     status: 'Under review at Canadian Geotechnical Journal',
     teaser: 'assets/img/teasers/sparsity-aware-lsm-rangamati-2026.jpg',
-    teaserAlt: 'Spatial sparsity-aware landslide susceptibility mapping figure for Rangamati, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: 3D mountain terrain with glowing clusters of sparse data points and network pathways, labelled with explainable-AI and spatial sparsity themes.',
     links: {
       paper: 'assets/papers/sparsity-aware-lsm-rangamati-2026.pdf',
       doi: 'https://doi.org/10.31223/X52J42',
@@ -142,7 +143,7 @@ const PUBLICATIONS = [
     venue: 'EarthArXiv preprint',
     status: 'Preprint',
     teaser: 'assets/img/teasers/bayesian-lsm-chattogram-2026.jpg',
-    teaserAlt: 'Bayesian machine learning landslide susceptibility mapping figure for Chattogram, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: 3D terrain model beneath a neural network diagram, with a susceptibility colour scale and prior, likelihood and posterior probability curves.',
     links: {
       paper: 'assets/papers/bayesian-lsm-chattogram-2026.pdf',
       doi: 'https://doi.org/10.31223/X55J40',
@@ -183,7 +184,7 @@ const PUBLICATIONS = [
     venue: 'Environmental Monitoring and Assessment',
     status: 'Under review at Environmental Monitoring and Assessment',
     teaser: 'assets/img/teasers/vegetation-dynamics-xai-2026.jpg',
-    teaserAlt: 'Explainable AI deep neural network figure for NDVI vegetation dynamics prediction, Chittagong Division, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: forested 3D landscape beneath a neural network diagram, with panels on NDVI input data and explainable-AI feature attribution.',
     links: {
       code: 'https://github.com/murad-geoAi/Soft_Computing_for_NDVI_Prediction'
     },
@@ -208,7 +209,7 @@ const PUBLICATIONS = [
            'Bangladesh (APMCE 2026), Dhaka',
     status: 'Accepted at APMCE 2026',
     teaser: 'assets/img/teasers/stochastic-pinn-consolidation-apmce-2026.jpg',
-    teaserAlt: 'Stochastic physics-informed neural network for consolidation parameter estimation figure.',
+    teaserAlt: 'Illustrative graphic: neural network diagram beside a clay, silt and sand soil column, with consolidation equations, a loss curve and Monte Carlo uncertainty curves.',
     links: {
       paper: 'assets/papers/stochastic-pinn-consolidation-apmce-2026.pdf'
     },
@@ -248,7 +249,7 @@ const PUBLICATIONS = [
     venue: 'EarthArXiv preprint',
     status: 'Preprint',
     teaser: 'assets/img/teasers/leakage-aware-flood-susceptibility-2026.jpg',
-    teaserAlt: 'Leakage-aware ensemble flood susceptibility mapping figure for the Greater Noakhali region, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: glowing river delta landscape beneath a neural network diagram, with flood susceptibility levels, probability curves and a confusion matrix.',
     links: {
       paper: 'assets/papers/leakage-aware-flood-susceptibility-2026.pdf',
       code: 'https://github.com/murad-geoAi/ml_flood_susceptibility_mapping'
@@ -286,7 +287,7 @@ const PUBLICATIONS = [
            'RUET, Rajshahi, Bangladesh',
     status: null,
     teaser: 'assets/img/teasers/landslide-inventory-hotspot-icceri-2025.jpg',
-    teaserAlt: 'Landslide inventory and hotspot analysis map of the Chittagong Hill Tracts, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: dark world map with glowing landslide hotspot clusters, a density legend and event-count charts.',
     links: {
       paper: 'assets/papers/landslide-inventory-hotspot-icceri-2025.pdf'
     },
@@ -323,7 +324,7 @@ const PUBLICATIONS = [
            '(ICERIE 2025), SUST, Sylhet, Bangladesh',
     status: null,
     teaser: 'assets/img/teasers/rangamati-dnn-lsm-icerie-2025.jpg',
-    teaserAlt: 'Deep learning landslide susceptibility map of Rangamati Hill District, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: neural network with terrain input factors above a 3D wireframe hill landscape with highlighted susceptible zones.',
     links: {
       paper: 'assets/papers/rangamati-dnn-lsm-icerie-2025.pdf',
       code: 'https://github.com/murad-geoAi/DL_Application_for_Landslide_Susceptibility_Mapping'
@@ -415,14 +416,18 @@ const PUBLICATIONS = [
     if (pub.teaser) {
       // `foo.jpg` has resized siblings `foo-480.webp` and `foo-960.webp`
       // (1376x768 sources, so 16:9). The JPG is only a fallback.
+      // The caption marks these as illustrations, not figures from the papers;
+      // the alt text already says so, hence aria-hidden.
       const base = pub.teaser.replace(/\.[a-z]+$/i, '');
-      return '<picture>' +
+      return '<figure class="pub-figure"><picture>' +
                '<source type="image/webp" sizes="' + TEASER_SIZES + '" srcset="' +
                  esc(base) + '-480.webp 480w, ' + esc(base) + '-960.webp 960w">' +
                '<img class="pub-teaser" src="' + esc(pub.teaser) + '" alt="' +
                  esc(pub.teaserAlt || '') + '" width="480" height="268" ' +
                  'loading="lazy" decoding="async">' +
-             '</picture>';
+             '</picture>' +
+             '<figcaption class="pub-figure-note" aria-hidden="true">Illustration</figcaption>' +
+             '</figure>';
     }
     // No figure yet: a labelled box that keeps the layout final.
     return '<div class="pub-teaser is-placeholder" aria-hidden="true">Figure<br>coming soon</div>';

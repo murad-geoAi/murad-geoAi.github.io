@@ -338,6 +338,16 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   object-fit: cover;
 }
 
+.pub-figure { margin: 0; }
+
+.pub-figure-note {
+  margin-top: .3rem;
+  font-size: .6875rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
 /* placeholder shown until a real teaser figure is dropped in */
 .pub-teaser.is-placeholder {
   display: grid;
