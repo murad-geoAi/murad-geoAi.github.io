@@ -444,6 +444,16 @@ const PUBLICATIONS = [
     data:   'Data'
   };
 
+  /** The status tag, minus whatever the venue line already says. */
+  function statusLabel(pub) {
+    if (!pub.status) return null;
+    if (pub.status === 'Preprint' && /preprint/i.test(pub.venue)) return null;
+    // "Under review at X" / "Accepted at X" where the venue already names X.
+    const m = /^(Under review|Accepted) at (.+)$/.exec(pub.status);
+    if (m && pub.venue.indexOf(m[2]) !== -1) return m[1];
+    return pub.status;
+  }
+
   function renderPublication(pub) {
     const absId = nextId('abstract');
     const bibId = nextId('bibtex');
@@ -464,8 +474,9 @@ const PUBLICATIONS = [
     parts.push('<p class="pub-authors">' + authorLine(pub.authors) + '</p>');
 
     // `venue` may contain entities such as &amp;, so it is not escaped here.
-    parts.push('<p class="pub-venue">' + pub.venue + ', ' + pub.year +
-      (pub.status ? '<span class="tag">' + esc(pub.status) + '</span>' : '') + '</p>');
+    const status = statusLabel(pub);
+    parts.push('<p class="pub-venue"><span>' + pub.venue + ', ' + pub.year + '</span>' +
+      (status ? '<span class="tag">' + esc(status) + '</span>' : '') + '</p>');
 
     // Action row
     const actions = [];
@@ -589,10 +600,30 @@ const PUBLICATIONS = [
       .filter(Boolean);
     if (!sections.length) return;
 
+    const list = links[0].closest('ul');
+
+    // Fade the edge(s) of the nav that have links scrolled out of view.
+    function updateFades() {
+      const max = list.scrollWidth - list.clientWidth;
+      list.classList.toggle('fade-left', list.scrollLeft > 2);
+      list.classList.toggle('fade-right', list.scrollLeft < max - 2);
+    }
+    list.addEventListener('scroll', updateFades, { passive: true });
+    window.addEventListener('resize', updateFades);
+    updateFades();
+
     function setCurrent(id) {
       links.forEach(function (a) {
-        if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'true');
-        else a.removeAttribute('aria-current');
+        if (a.getAttribute('href') === '#' + id) {
+          a.setAttribute('aria-current', 'true');
+          // Keep the active link visible when the nav overflows (phones).
+          const left = a.offsetLeft - list.offsetLeft;
+          if (left < list.scrollLeft || left + a.offsetWidth > list.scrollLeft + list.clientWidth) {
+            list.scrollTo({ left: left - 16 });
+          }
+        } else {
+          a.removeAttribute('aria-current');
+        }
       });
     }
 

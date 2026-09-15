@@ -175,7 +175,8 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border-bottom: 3px solid var(--cyan);
 }
 
-.header-inner { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
+/* Stacked and centered on phones; becomes a left-aligned row at 48em. */
+.header-inner { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; text-align: center; }
 
 .avatar {
   width: 108px;
@@ -191,7 +192,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .tagline {
   color: var(--on-navy-2);
   max-width: 34rem;
-  margin-bottom: 1.1rem;
+  margin: 0 auto 1.1rem;
 }
 
 /* icon + label links */
@@ -199,6 +200,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   list-style: none;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: .5rem;
   margin: 0;
   padding: 0;
@@ -256,6 +258,16 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   scrollbar-width: none;
 }
 .site-nav ul::-webkit-scrollbar { display: none; }
+/* The scrollbar is hidden, so fade whichever edge has more links past it.
+   JS sets the classes; without JS the list simply scrolls unfaded. */
+.site-nav ul.fade-right { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+                          mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent); }
+.site-nav ul.fade-left { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 2.5rem), transparent);
+                         mask-image: linear-gradient(to left, #000 calc(100% - 2.5rem), transparent); }
+.site-nav ul.fade-left.fade-right {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent);
+          mask-image: linear-gradient(to right, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent);
+}
 
 .site-nav a {
   display: block;
@@ -318,6 +330,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border-left: 3px solid var(--cyan-dim);
 }
 .pub-year:first-child { margin-top: 0; }
+.pub-year + .pub { border-top: 0; padding-top: .5rem; }
 
 .pub {
   display: grid;
@@ -368,7 +381,9 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .pub-authors { font-size: .9375rem; color: var(--fg-muted); margin-bottom: .2rem; }
 .pub-authors .me { color: var(--fg); font-weight: 650; }
 
-.pub-venue { font-size: .9375rem; color: var(--fg-muted); margin-bottom: .55rem; }
+/* flex so a wrapped status tag starts flush left instead of indented */
+.pub-venue { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .45rem;
+             font-size: .9375rem; color: var(--fg-muted); margin-bottom: .55rem; }
 
 .tag {
   display: inline-block;
@@ -379,8 +394,6 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border-radius: 2px;
   background: var(--bg-tint);
   color: #1d4f6b;
-  margin-left: .35rem;
-  vertical-align: 1px;
 }
 
 /* ------------------------------- buttons ------------------------------- */
@@ -468,7 +481,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .repo-name {
   font-family: var(--mono);
   font-size: .8125rem;
-  word-break: break-word;
+  overflow-wrap: anywhere;   /* last resort; <wbr> after - and _ gives the preferred breaks */
   text-decoration: none;
 }
 .repo-name:hover { text-decoration: underline; }
@@ -540,7 +553,9 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
   .site-header { padding-block: 3.5rem 2.5rem; }
 
-  .header-inner { flex-direction: row; align-items: center; gap: 1.75rem; }
+  .header-inner { flex-direction: row; align-items: center; gap: 1.75rem; text-align: left; }
+  .tagline { margin-inline: 0; }
+  .links { justify-content: flex-start; }
   .avatar { width: 132px; height: 132px; flex: 0 0 auto; }
 
   main > section { padding-block: 3rem 0; }
