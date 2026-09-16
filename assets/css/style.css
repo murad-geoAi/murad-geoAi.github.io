@@ -484,6 +484,34 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .repo-desc { font-size: .875rem; color: var(--ink-muted); margin: 0; }
 
+/* -------------------------------- demo -------------------------------- */
+
+/* scatter-dot accent beside the heading — same motif family as the hero/dividers */
+.demo-accent {
+  display: inline-block;
+  width: 2.6rem;
+  height: 1.4rem;
+  margin-left: .5rem;
+  vertical-align: middle;
+  opacity: .8;
+}
+
+.demo-frame {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.demo-frame iframe {
+  display: block;
+  width: 100%;
+  height: 420px;
+  border: 0;
+}
+
+.demo-fallback-note { margin-top: .6rem; margin-bottom: 0; font-size: .8125rem; }
+
 /* ------------------------------- skills ------------------------------- */
 
 .skills { margin: 0; display: grid; grid-template-columns: 1fr; gap: .25rem 1.25rem; }
@@ -553,6 +581,8 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   .pub { grid-template-columns: 13rem 1fr; gap: 1.25rem; align-items: start; }
 
   .repo-grid { grid-template-columns: 1fr 1fr; }
+
+  .demo-frame iframe { height: 560px; }
 
   .skills { grid-template-columns: 10rem 1fr; gap: .4rem 1.25rem; }
   .skills dd { margin-bottom: .4rem; }

@@ -128,6 +128,7 @@
       <li><a href="#news">News</a></li>
       <li><a href="#publications">Publications</a></li>
       <li><a href="#code">Open source</a></li>
+      <li><a href="#demo">Demo</a></li>
       <li><a href="#skills">Skills</a></li>
     </ul>
   </div>
@@ -264,6 +265,28 @@
       <p class="repo-desc">Reproducible pipeline for rainfall time-series dataset generation in Google Earth Engine and forecasting with machine learning and deep learning models.</p>
     </li>
   </ul>
+</section>
+
+<!-- ============================= DEMO ============================= -->
+<section id="demo" data-reveal>
+  <h2>Demo<svg class="demo-accent" viewBox="0 0 56 30" aria-hidden="true" focusable="false">
+    <g fill="var(--accent)">
+      <circle cx="6" cy="22" r="2.2"/>
+      <circle cx="16" cy="14" r="2.2"/>
+      <circle cx="26" cy="24" r="2.2"/>
+      <circle cx="34" cy="10" r="2.2"/>
+      <circle cx="44" cy="18" r="2.2"/>
+      <circle cx="50" cy="6" r="2.2"/>
+    </g>
+    <path d="M0 26 C 14 20, 22 20, 30 12 S 46 8, 56 4" fill="none" stroke="var(--border-firm)" stroke-width="1.2" stroke-dasharray="1.5 3.5" stroke-linecap="round"/>
+  </svg></h2>
+  <p class="note">Random 5-fold cross-validation looks strong on spatially clustered data until the split
+    respects geography. Synthetic points below carry deliberate spatial autocorrelation; toggle the
+    validation scheme to see the AUC gap between random folds and spatially blocked folds.</p>
+  <div class="demo-frame">
+    <iframe src="demos/spatial-cv-demo.html" title="Interactive map comparing random and spatial-block 5-fold cross-validation on synthetic landslide-susceptibility points" loading="lazy"></iframe>
+  </div>
+  <p class="note demo-fallback-note">If the map above doesn't load, <a href="demos/spatial-cv-demo.html">open it directly</a>.</p>
 </section>
 
 <!-- ============================= SKILLS ============================= -->

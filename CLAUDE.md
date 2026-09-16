@@ -126,6 +126,25 @@ Keep text contrast at WCAG AA (4.5:1) or better, non-text UI boundaries at
 whenever a token value changes. The site respects `prefers-reduced-motion`;
 any animation must be disabled under it.
 
+## Regenerating the demo map
+
+`demos/spatial-cv-demo.html` is a static Folium map, embedded via `<iframe>`
+in the Demo section of `index.html`. It's generated, not hand-written — to
+regenerate it after changing the fold logic, colors, or panel styling, edit
+`scripts/make_demo_map.py` and run:
+
+```bash
+python3 -m pip install folium numpy scikit-learn   # one-time, dev-only
+python3 scripts/make_demo_map.py                    # Windows: py scripts/make_demo_map.py
+```
+
+This also vendors Leaflet into `assets/vendor/leaflet/` on first run (skipped
+if already present) so the demo has no third-party runtime dependency —
+regenerating never adds a CDN call. The basemap is Esri's free World Light
+Gray Canvas (no API key); CARTO's free keyless Positron tier was retired and
+now serves a watermarked tile, so don't switch back to it without verifying
+by loading an actual tile first.
+
 ## Preview locally
 
 ```bash
