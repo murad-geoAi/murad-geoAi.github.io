@@ -316,7 +316,7 @@ def main():
         tiles=None,
         control_scale=False,
     )
-    folium.TileLayer(tiles=TILE_URL, attr=TILE_ATTR, name="CARTO Positron", control=False).add_to(m)
+    folium.TileLayer(tiles=TILE_URL, attr=TILE_ATTR, name="Esri Light Gray", control=False).add_to(m)
 
     fg_random = folium.FeatureGroup(name="Random 5-fold", show=True)
     fg_spatial = folium.FeatureGroup(name="Spatial block 5-fold", show=False)

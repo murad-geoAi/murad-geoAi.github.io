@@ -20,6 +20,14 @@ repo is exactly what GitHub Pages serves from the `main` branch root.
   "Figure coming soon" placeholder box if absent).
 - `assets/papers/` — PDFs linked from the Publications section.
 - `assets/cv/golam-murad-cv.pdf` — linked CV.
+- `assets/vendor/leaflet/` — vendored Leaflet JS/CSS/marker images, so the
+  demo map has no third-party runtime dependency. Not hand-edited; see
+  "Regenerating the demo map" below.
+- `demos/spatial-cv-demo.html` — generated Folium map, embedded via
+  `<iframe>` in the Demo section. Not hand-edited.
+- `scripts/make_demo_map.py` — generates `demos/spatial-cv-demo.html`.
+  Dev-only (needs `folium`, `numpy`, `scikit-learn`; not shipped to
+  visitors).
 
 ## Critical rule: JS-disabled parity
 
