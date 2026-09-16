@@ -22,6 +22,12 @@ framework. What is in the repository is exactly what GitHub Pages serves.
 │   │   └── teasers/        per-paper images: foo.jpg + foo-480.webp + foo-960.webp
 │   ├── papers/             PDFs linked from the Publications section
 │   └── cv/golam-murad-cv.pdf
+├── demos/
+│   ├── spatial-cv-demo.html  generated map embedded in the #demo section
+│   └── vendor/             Leaflet 1.9.4, self-hosted — the demo makes no CDN calls
+├── scripts/                build-time only; the site itself needs nothing installed
+│   ├── make_demo_map.py    regenerates demos/spatial-cv-demo.html (see scripts/README.md)
+│   └── requirements.txt
 ├── README.md
 └── TODO.md                 open items and things to verify
 ```

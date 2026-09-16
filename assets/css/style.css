@@ -415,6 +415,25 @@ h2:has(+ .note) { margin-bottom: .85rem; }
   color: var(--on-tint);
 }
 
+/* -------------------------------- demo -------------------------------- */
+
+/* Taller than wide on phones, and bled out to the screen edges so the map has
+   room to breathe. The negative margin is safe because every bit of page
+   padding lives on .wrap's padding-inline — body itself has none. */
+.demo-frame {
+  width: calc(100% + var(--gutter) * 2);
+  margin-inline: calc(var(--gutter) * -1);
+  aspect-ratio: 4 / 5;
+  border-block: 1px solid var(--rule);
+  background: var(--bg-soft);
+  overflow: hidden;
+}
+
+.demo-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+.demo-note { margin-top: .75rem; }
+.demo-actions { margin-top: 1rem; }
+
 /* ------------------------------- buttons ------------------------------- */
 
 .pub-actions { display: flex; flex-wrap: wrap; gap: .4rem; }
@@ -589,6 +608,15 @@ h2:has(+ .note) { margin-bottom: .85rem; }
 
   /* news: date column on the left, one line on the right */
   .news-list li { grid-template-columns: 6.5rem 1fr; }
+
+  /* demo: 16:9 and back inside the column */
+  .demo-frame {
+    width: 100%;
+    margin-inline: 0;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+  }
 
   /* publications: teaser on the left */
   .pub { grid-template-columns: 13rem 1fr; gap: 1.25rem; align-items: start; }
