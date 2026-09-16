@@ -155,6 +155,8 @@ def point_collection(coords: np.ndarray, folds: np.ndarray) -> dict:
     """One GeoJSON FeatureCollection — far smaller than 300 CircleMarker objects.
 
     Coordinates are rounded to 5 decimals (~1 m), and fold is the only property.
+    It is written 1-based because the tooltip shows it verbatim; everything that
+    indexes with it subtracts one.
     """
     return {
         "type": "FeatureCollection",
@@ -165,7 +167,7 @@ def point_collection(coords: np.ndarray, folds: np.ndarray) -> dict:
                     "type": "Point",
                     "coordinates": [round(float(lon), 5), round(float(lat), 5)],
                 },
-                "properties": {"fold": int(fold)},
+                "properties": {"fold": int(fold) + 1},
             }
             for (lon, lat), fold in zip(coords, folds)
         ],
@@ -173,14 +175,17 @@ def point_collection(coords: np.ndarray, folds: np.ndarray) -> dict:
 
 
 def add_layer(m: folium.Map, name: str, data: dict, show: bool) -> None:
-    group = folium.FeatureGroup(name=name, show=show)
+    # overlay=False files these under the control's base layers, so Leaflet
+    # draws radio buttons. The two fold layouts are alternative views of one
+    # dataset; stacking them, or clearing both, says nothing.
+    group = folium.FeatureGroup(name=name, overlay=False, show=show)
     folium.GeoJson(
         data,
         marker=folium.CircleMarker(
             radius=5, weight=1, color="#ffffff", fill=True, fill_opacity=0.95
         ),
         style_function=lambda feat: {
-            "fillColor": FOLD_COLORS[feat["properties"]["fold"]],
+            "fillColor": FOLD_COLORS[feat["properties"]["fold"] - 1],
             "color": "#ffffff",
         },
         tooltip=folium.GeoJsonTooltip(fields=["fold"], aliases=["Fold"]),
@@ -317,10 +322,11 @@ def main() -> None:
     m = folium.Map(
         location=[(LAT_MIN + LAT_MAX) / 2, (LON_MIN + LON_MAX) / 2],
         zoom_start=11,
-        tiles="CartoDB positron",
+        tiles=None,              # added below, so it stays out of the control
         scrollWheelZoom=False,   # the page must stay scrollable over the map
         control_scale=False,
     )
+    folium.TileLayer("CartoDB positron", control=False).add_to(m)
     add_layer(m, f"Random {N_FOLDS}-fold", point_collection(coords, random_folds), show=True)
     add_layer(m, f"Spatial block {N_FOLDS}-fold", point_collection(coords, spatial_folds), show=False)
     folium.LayerControl(collapsed=False).add_to(m)
