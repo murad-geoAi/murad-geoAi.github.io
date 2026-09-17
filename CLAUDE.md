@@ -15,9 +15,13 @@ repo is exactly what GitHub Pages serves from the `main` branch root.
   fallback block near the bottom.
 - `assets/css/style.css` — all styling; CSS variables at the top.
 - `assets/js/main.js` — `NEWS` and `PUBLICATIONS` data arrays plus all
-  interactions (rendering, filtering, "show more", copy-bibtex, etc.).
+  interactions (rendering, filtering, "show more", copy-bibtex, GitHub star
+  fetch, etc.).
 - `assets/img/teasers/` — per-paper figures (optional; falls back to a
-  "Figure coming soon" placeholder box if absent).
+  "Figure coming soon" placeholder box if absent). Each figure needs three
+  files: `foo.jpg` plus resized `foo-480.webp` and `foo-960.webp` (browsers
+  load the WebP; a missing resized copy shows as a broken image). Full
+  convention and a Pillow one-liner are in `README.md`.
 - `assets/papers/` — PDFs linked from the Publications section.
 - `assets/cv/golam-murad-cv.pdf` — linked CV.
 - `assets/vendor/leaflet/` — vendored Leaflet JS/CSS/marker images, so the
@@ -26,8 +30,8 @@ repo is exactly what GitHub Pages serves from the `main` branch root.
 - `demos/spatial-cv-demo.html` — generated Folium map, embedded via
   `<iframe>` in the Demo section. Not hand-edited.
 - `scripts/make_demo_map.py` — generates `demos/spatial-cv-demo.html`.
-  Dev-only (needs `folium`, `numpy`, `scikit-learn`; not shipped to
-  visitors).
+  Dev-only (needs `folium`, `numpy`, `scikit-learn`, pinned in
+  `scripts/requirements.txt`; not shipped to visitors).
 
 ## Critical rule: JS-disabled parity
 
@@ -77,7 +81,8 @@ render in array order, so put new papers at the top of their year.
   video, data`. A new link kind must be added to `LINK_LABELS`
   (`assets/js/main.js:420`).
 - PDFs go in `assets/papers/`, lowercase hyphenated filenames. Teasers go in
-  `assets/img/teasers/`, ~1200px wide, 4:3.
+  `assets/img/teasers/`, ~1200px wide, 4:3 (see the three-file WebP
+  convention above).
 
 ## Adding a news item
 
@@ -142,9 +147,15 @@ regenerate it after changing the fold logic, colors, or panel styling, edit
 `scripts/make_demo_map.py` and run:
 
 ```bash
-python3 -m pip install folium numpy scikit-learn   # one-time, dev-only
-python3 scripts/make_demo_map.py                    # Windows: py scripts/make_demo_map.py
+python3 -m pip install -r scripts/requirements.txt   # one-time, dev-only
+python3 scripts/make_demo_map.py                      # Windows: py scripts/make_demo_map.py
 ```
+
+The seed is pinned and Folium's element ids are rewritten to sequential ones,
+so reruns are byte-identical and a diff means something real changed. If the
+demo's underlying data or model changes, the two AUC figures it prints must
+also be updated by hand in the `#demo` section of `index.html`, or the prose
+and the map will disagree.
 
 This also vendors Leaflet into `assets/vendor/leaflet/` on first run (skipped
 if already present) so the demo has no third-party runtime dependency —
@@ -165,7 +176,8 @@ differs.
 
 After an edit, check: the page at 375px/768px/1280px width; the same page
 with JavaScript disabled (publications and news must still list); and tab
-order (every link/button should show a focus ring).
+order (every link/button should show a focus ring). There is no test suite,
+linter, or CI — verification is manual.
 
 ## Deploy
 
@@ -181,4 +193,5 @@ See `TODO.md` for unverified facts, missing content (teaser figures, some
 abstracts/PDFs/DOIs), and status labels pending confirmation from the site
 owner — several facts currently on the site (e.g. PhD start date, position
 title) came from the prompt rather than a source file and are flagged there
-for double-checking.
+for double-checking. See `README.md` for the full publication/news-item
+recipes.

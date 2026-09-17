@@ -34,8 +34,11 @@ the following is on the site on your word alone and should be double-checked:
 
 ## Missing content
 
-- [ ] **Teaser figures.** Every publication currently shows a "Figure coming soon"
-      placeholder box. Drop ~1200px-wide figures into `assets/img/teasers/`, then
+- [x] **Teaser figures.** All seven papers now have illustrative teasers
+      (captioned "Illustration"). They are AI-generated graphics with some garbled
+      text inside the images; consider swapping in real figures from the papers.
+      See README for the JPG + WebP file convention. Originally: drop figures into
+      `assets/img/teasers/`, then
       set `teaser` and `teaserAlt` on the matching object in `PUBLICATIONS`. The
       layout does not change when you do — only the image appears.
 - [ ] **Vegetation dynamics paper has no abstract and no PDF.** There is no

@@ -80,7 +80,8 @@ const NEWS_VISIBLE = 6;   // how many entries show before "Show more"
                so it renders bold.
      venue     string
      status    optional — 'Preprint', 'Under review at X', 'Accepted at X'
-     teaser    optional — path to a figure, e.g. 'assets/img/teasers/foo.webp'.
+     teaser    optional — path to a 16:9 JPG, e.g. 'assets/img/teasers/foo.jpg',
+               with resized siblings foo-480.webp and foo-960.webp next to it.
                Leave null for a placeholder box.
      teaserAlt alt text for the teaser; required whenever `teaser` is set.
      links     optional — { paper, code, doi, arxiv, slides, ... }
@@ -99,7 +100,7 @@ const PUBLICATIONS = [
     venue: 'EarthArXiv preprint',
     status: 'Under review at Canadian Geotechnical Journal',
     teaser: 'assets/img/teasers/sparsity-aware-lsm-rangamati-2026.jpg',
-    teaserAlt: 'Spatial sparsity-aware landslide susceptibility mapping figure for Rangamati, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: 3D mountain terrain with glowing clusters of sparse data points and network pathways, labelled with explainable-AI and spatial sparsity themes.',
     links: {
       paper: 'assets/papers/sparsity-aware-lsm-rangamati-2026.pdf',
       doi: 'https://doi.org/10.31223/X52J42',
@@ -142,7 +143,7 @@ const PUBLICATIONS = [
     venue: 'EarthArXiv preprint',
     status: 'Preprint',
     teaser: 'assets/img/teasers/bayesian-lsm-chattogram-2026.jpg',
-    teaserAlt: 'Bayesian machine learning landslide susceptibility mapping figure for Chattogram, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: 3D terrain model beneath a neural network diagram, with a susceptibility colour scale and prior, likelihood and posterior probability curves.',
     links: {
       paper: 'assets/papers/bayesian-lsm-chattogram-2026.pdf',
       doi: 'https://doi.org/10.31223/X55J40',
@@ -183,7 +184,7 @@ const PUBLICATIONS = [
     venue: 'Environmental Monitoring and Assessment',
     status: 'Under review at Environmental Monitoring and Assessment',
     teaser: 'assets/img/teasers/vegetation-dynamics-xai-2026.jpg',
-    teaserAlt: 'Explainable AI deep neural network figure for NDVI vegetation dynamics prediction, Chittagong Division, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: forested 3D landscape beneath a neural network diagram, with panels on NDVI input data and explainable-AI feature attribution.',
     links: {
       code: 'https://github.com/murad-geoAi/Soft_Computing_for_NDVI_Prediction'
     },
@@ -208,7 +209,7 @@ const PUBLICATIONS = [
            'Bangladesh (APMCE 2026), Dhaka',
     status: 'Accepted at APMCE 2026',
     teaser: 'assets/img/teasers/stochastic-pinn-consolidation-apmce-2026.jpg',
-    teaserAlt: 'Stochastic physics-informed neural network for consolidation parameter estimation figure.',
+    teaserAlt: 'Illustrative graphic: neural network diagram beside a clay, silt and sand soil column, with consolidation equations, a loss curve and Monte Carlo uncertainty curves.',
     links: {
       paper: 'assets/papers/stochastic-pinn-consolidation-apmce-2026.pdf'
     },
@@ -248,7 +249,7 @@ const PUBLICATIONS = [
     venue: 'EarthArXiv preprint',
     status: 'Preprint',
     teaser: 'assets/img/teasers/leakage-aware-flood-susceptibility-2026.jpg',
-    teaserAlt: 'Leakage-aware ensemble flood susceptibility mapping figure for the Greater Noakhali region, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: glowing river delta landscape beneath a neural network diagram, with flood susceptibility levels, probability curves and a confusion matrix.',
     links: {
       paper: 'assets/papers/leakage-aware-flood-susceptibility-2026.pdf',
       code: 'https://github.com/murad-geoAi/ml_flood_susceptibility_mapping'
@@ -286,7 +287,7 @@ const PUBLICATIONS = [
            'RUET, Rajshahi, Bangladesh',
     status: null,
     teaser: 'assets/img/teasers/landslide-inventory-hotspot-icceri-2025.jpg',
-    teaserAlt: 'Landslide inventory and hotspot analysis map of the Chittagong Hill Tracts, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: dark world map with glowing landslide hotspot clusters, a density legend and event-count charts.',
     links: {
       paper: 'assets/papers/landslide-inventory-hotspot-icceri-2025.pdf'
     },
@@ -323,7 +324,7 @@ const PUBLICATIONS = [
            '(ICERIE 2025), SUST, Sylhet, Bangladesh',
     status: null,
     teaser: 'assets/img/teasers/rangamati-dnn-lsm-icerie-2025.jpg',
-    teaserAlt: 'Deep learning landslide susceptibility map of Rangamati Hill District, Bangladesh.',
+    teaserAlt: 'Illustrative graphic: neural network with terrain input factors above a 3D wireframe hill landscape with highlighted susceptible zones.',
     links: {
       paper: 'assets/papers/rangamati-dnn-lsm-icerie-2025.pdf',
       code: 'https://github.com/murad-geoAi/DL_Application_for_Landslide_Susceptibility_Mapping'
@@ -408,10 +409,25 @@ const PUBLICATIONS = [
     }).join(', ');
   }
 
+  // Rendered widths: 22rem cap on mobile, 13rem column at 48em, 15rem at 80em.
+  const TEASER_SIZES = '(min-width: 80em) 15rem, (min-width: 48em) 13rem, 22rem';
+
   function teaserMarkup(pub) {
     if (pub.teaser) {
-      return '<img class="pub-teaser" src="' + esc(pub.teaser) + '" alt="' +
-             esc(pub.teaserAlt || '') + '" loading="lazy" decoding="async">';
+      // `foo.jpg` has resized siblings `foo-480.webp` and `foo-960.webp`
+      // (1376x768 sources, so 16:9). The JPG is only a fallback.
+      // The caption marks these as illustrations, not figures from the papers;
+      // the alt text already says so, hence aria-hidden.
+      const base = pub.teaser.replace(/\.[a-z]+$/i, '');
+      return '<figure class="pub-figure"><picture>' +
+               '<source type="image/webp" sizes="' + TEASER_SIZES + '" srcset="' +
+                 esc(base) + '-480.webp 480w, ' + esc(base) + '-960.webp 960w">' +
+               '<img class="pub-teaser" src="' + esc(pub.teaser) + '" alt="' +
+                 esc(pub.teaserAlt || '') + '" width="480" height="268" ' +
+                 'loading="lazy" decoding="async">' +
+             '</picture>' +
+             '<figcaption class="pub-figure-note" aria-hidden="true">Illustration</figcaption>' +
+             '</figure>';
     }
     // No figure yet: a labelled box that keeps the layout final.
     return '<div class="pub-teaser is-placeholder" aria-hidden="true">Figure<br>coming soon</div>';
@@ -427,6 +443,16 @@ const PUBLICATIONS = [
     video:  'Video',
     data:   'Data'
   };
+
+  /** The status tag, minus whatever the venue line already says. */
+  function statusLabel(pub) {
+    if (!pub.status) return null;
+    if (pub.status === 'Preprint' && /preprint/i.test(pub.venue)) return null;
+    // "Under review at X" / "Accepted at X" where the venue already names X.
+    const m = /^(Under review|Accepted) at (.+)$/.exec(pub.status);
+    if (m && pub.venue.indexOf(m[2]) !== -1) return m[1];
+    return pub.status;
+  }
 
   function renderPublication(pub) {
     const absId = nextId('abstract');
@@ -448,8 +474,9 @@ const PUBLICATIONS = [
     parts.push('<p class="pub-authors">' + authorLine(pub.authors) + '</p>');
 
     // `venue` may contain entities such as &amp;, so it is not escaped here.
-    parts.push('<p class="pub-venue">' + pub.venue + ', ' + pub.year +
-      (pub.status ? '<span class="tag">' + esc(pub.status) + '</span>' : '') + '</p>');
+    const status = statusLabel(pub);
+    parts.push('<p class="pub-venue"><span>' + pub.venue + ', ' + pub.year + '</span>' +
+      (status ? '<span class="tag">' + esc(status) + '</span>' : '') + '</p>');
 
     // Action row
     const actions = [];
@@ -573,10 +600,30 @@ const PUBLICATIONS = [
       .filter(Boolean);
     if (!sections.length) return;
 
+    const list = links[0].closest('ul');
+
+    // Fade the edge(s) of the nav that have links scrolled out of view.
+    function updateFades() {
+      const max = list.scrollWidth - list.clientWidth;
+      list.classList.toggle('fade-left', list.scrollLeft > 2);
+      list.classList.toggle('fade-right', list.scrollLeft < max - 2);
+    }
+    list.addEventListener('scroll', updateFades, { passive: true });
+    window.addEventListener('resize', updateFades);
+    updateFades();
+
     function setCurrent(id) {
       links.forEach(function (a) {
-        if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'true');
-        else a.removeAttribute('aria-current');
+        if (a.getAttribute('href') === '#' + id) {
+          a.setAttribute('aria-current', 'true');
+          // Keep the active link visible when the nav overflows (phones).
+          const left = a.offsetLeft - list.offsetLeft;
+          if (left < list.scrollLeft || left + a.offsetWidth > list.scrollLeft + list.clientWidth) {
+            list.scrollTo({ left: left - 16 });
+          }
+        } else {
+          a.removeAttribute('aria-current');
+        }
       });
     }
 
@@ -595,21 +642,37 @@ const PUBLICATIONS = [
     }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
 
     sections.forEach(function (s) { observer.observe(s); });
+
+    // The last section is too short to reach the reading band, so mark it
+    // current once the page is scrolled to the bottom.
+    window.addEventListener('scroll', function () {
+      const doc = document.documentElement;
+      if (window.innerHeight + window.scrollY >= doc.scrollHeight - 2) {
+        setCurrent(sections[sections.length - 1].id);
+      }
+    }, { passive: true });
   }
 
   /* ------------------------------ reveal ------------------------------ */
 
   function wireReveal() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (!('IntersectionObserver' in window)) return;
+    if (!('IntersectionObserver' in window)) {
+      // CSS hides [data-reveal] under .js; with no observer, show everything now.
+      document.querySelectorAll('[data-reveal]').forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
 
+    // threshold 0: any sliver on screen counts, so a tall block can't stay hidden.
     const observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         entry.target.classList.add('is-visible');
         observer.unobserve(entry.target);
       });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0 });
 
     document.querySelectorAll('[data-reveal]').forEach(function (el) {
       observer.observe(el);
