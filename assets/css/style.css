@@ -43,6 +43,15 @@
   --measure: 46rem;       /* readable column */
   --gutter:  1.25rem;
 
+  /* type scale — six steps, nothing below --text-xs (12px, the legibility
+     floor). Collapses what used to be ~11 near-duplicate literal sizes. */
+  --text-xs:   0.75rem;    /* 12px — eyebrow labels, chips, meta */
+  --text-sm:   0.875rem;   /* 14px — captions, notes, secondary text, buttons */
+  --text-base: 1.0625rem;  /* 17px — body */
+  --text-lg:   1.25rem;    /* 20px — section headings (h2) */
+  --text-xl:   1.75rem;    /* 28px — h1 on phones */
+  --text-2xl:  2.125rem;   /* 34px — h1 on desktop */
+
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
           Arial, "Noto Sans", sans-serif;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
@@ -84,7 +93,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font: 400 1rem/1.6 var(--sans);
-  font-size: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  font-size: clamp(1rem, 0.97rem + 0.15vw, var(--text-base));
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -96,13 +105,10 @@ img { max-width: 100%; height: auto; display: block; }
 
 h1, h2, h3 { line-height: 1.25; font-weight: 600; letter-spacing: -0.011em; margin: 0; }
 
-h1 { font-size: 1.75rem; }
+h1 { font-size: var(--text-xl); }
 
 h2 {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .09em;
+  font-size: var(--text-lg);
   color: var(--ink);
   padding-bottom: .5rem;
   border-bottom: 1px solid var(--border);
@@ -123,7 +129,7 @@ h2::after {
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 8'%3E%3Cpath d='M0 6 C4 2 8 7 13 4 S22 1 27 5 S35 3 40 5' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
-h3 { font-size: 1rem; }
+h3 { font-size: var(--text-base); }
 
 p { margin: 0 0 1rem; }
 p:last-child { margin-bottom: 0; }
@@ -216,7 +222,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   gap: .5rem;
   margin: 0;
   padding: 0;
-  font-size: .875rem;
+  font-size: var(--text-sm);
 }
 
 .links a {
@@ -230,7 +236,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border: 1px solid var(--border);
   border-radius: 3px;
   line-height: 1.4;
-  min-height: 2.25rem;    /* thumb-sized on phones; reset at 48em */
+  min-height: 2.75rem;    /* 44px — HIG touch-target minimum on phones; 40px on pointer devices, 48em+ */
 }
 .links a:hover {
   color: var(--accent-text);
@@ -284,10 +290,11 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 }
 
 .site-nav a {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;    /* 44px — HIG touch-target minimum */
   white-space: nowrap;
-  padding: .7rem 0;
-  font-size: .875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--ink-muted);
   text-decoration: none;
@@ -305,7 +312,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .interests li::marker { color: var(--accent); }
 .interests li:last-child { margin-bottom: 0; }
 
-.note { font-size: .875rem; color: var(--ink-muted); margin-top: -.4rem; margin-bottom: 1.1rem; }
+.note { font-size: var(--text-sm); color: var(--ink-muted); margin-top: -.4rem; margin-bottom: 1.1rem; }
 
 /* ------------------------------- news ------------------------------- */
 
@@ -325,7 +332,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .news-date {
   color: var(--ink);
-  font-size: .8125rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -335,7 +342,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 /* ---------------------------- publications ---------------------------- */
 
 .pub-year {
-  font-size: .8125rem;
+  font-size: var(--text-sm);
   font-weight: 700;
   letter-spacing: .09em;
   color: var(--ink);
@@ -369,7 +376,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .pub-figure-note {
   margin-top: .3rem;
-  font-size: .6875rem;
+  font-size: var(--text-xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--ink-muted);
@@ -382,26 +389,26 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   background: var(--accent-soft);
   border-color: var(--border);
   color: var(--ink);
-  font-size: .75rem;
+  font-size: var(--text-xs);
   letter-spacing: .04em;
   text-align: center;
   padding: .5rem;
 }
 
-.pub-title { font-size: 1rem; font-weight: 650; margin-bottom: .3rem; }
+.pub-title { font-size: var(--text-base); font-weight: 650; margin-bottom: .3rem; }
 .pub-title a { color: var(--ink); text-decoration: none; }
 .pub-title a:hover { color: var(--accent-text); text-decoration: underline; }
 
-.pub-authors { font-size: .9375rem; color: var(--ink-muted); margin-bottom: .2rem; }
+.pub-authors { font-size: var(--text-sm); color: var(--ink-muted); margin-bottom: .2rem; }
 .pub-authors .me { color: var(--ink); font-weight: 650; }
 
 /* flex so a wrapped status tag starts flush left instead of indented */
 .pub-venue { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .45rem;
-             font-size: .9375rem; color: var(--ink-muted); margin-bottom: .55rem; }
+             font-size: var(--text-sm); color: var(--ink-muted); margin-bottom: .55rem; }
 
 .tag {
   display: inline-block;
-  font-size: .75rem;
+  font-size: var(--text-xs);
   letter-spacing: .03em;
   padding: .1rem .45rem;
   border: 1px solid var(--border);
@@ -416,14 +423,14 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 /* ------------------------------- buttons ------------------------------- */
 
-.pub-actions { display: flex; flex-wrap: wrap; gap: .4rem; }
+.pub-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
 
 .btn {
   display: inline-flex;
   align-items: center;
-  min-height: 2.25rem;    /* thumb-sized on phones; reset at 48em */
+  min-height: 2.75rem;    /* 44px — HIG touch-target minimum on phones; 40px on pointer devices, 48em+ */
   font: inherit;
-  font-size: .8125rem;
+  font-size: var(--text-sm);
   line-height: 1.4;
   padding: .25rem .6rem;
   color: var(--accent-text);
@@ -451,7 +458,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
   border-radius: 3px;
-  font-size: .9375rem;
+  font-size: var(--text-sm);
 }
 .panel[hidden] { display: none; }
 
@@ -462,7 +469,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .panel-bibtex pre {
   margin: 0;
   overflow-x: auto;
-  font-size: .78125rem;
+  font-size: var(--text-sm);
   line-height: 1.5;
   white-space: pre;
   tab-size: 2;
@@ -501,7 +508,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .repo-name {
   font-family: var(--mono);
-  font-size: .8125rem;
+  font-size: var(--text-sm);
   color: var(--accent-text);
   overflow-wrap: anywhere;  /* last resort; <wbr> after - and _ gives the preferred breaks */
   text-decoration: none;
@@ -509,7 +516,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 .repo-name:hover { text-decoration: underline; }
 
 .stars {
-  font-size: .75rem;
+  font-size: var(--text-xs);
   color: var(--ink);
   font-weight: 650;
   font-variant-numeric: tabular-nums;
@@ -517,7 +524,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 }
 .stars:empty { display: none; }
 
-.repo-desc { font-size: .875rem; color: var(--ink-muted); margin: 0; }
+.repo-desc { font-size: var(--text-sm); color: var(--ink-muted); margin: 0; }
 
 /* -------------------------------- demo -------------------------------- */
 
@@ -545,14 +552,14 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   border: 0;
 }
 
-.demo-fallback-note { margin-top: .6rem; margin-bottom: 0; font-size: .8125rem; }
+.demo-fallback-note { margin-top: .6rem; margin-bottom: 0; font-size: var(--text-sm); }
 
 /* ------------------------------- skills ------------------------------- */
 
 .skills { margin: 0; display: grid; grid-template-columns: 1fr; gap: .25rem 1.25rem; }
 
 .skills dt {
-  font-size: .8125rem;
+  font-size: var(--text-sm);
   font-weight: 700;
   letter-spacing: .04em;
   color: var(--ink);
@@ -563,7 +570,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 
 .pills { list-style: none; display: flex; flex-wrap: wrap; gap: .35rem; margin: 0; padding: 0; }
 .pills li {
-  font-size: .8125rem;
+  font-size: var(--text-sm);
   padding: .12rem .5rem;
   border: 1px solid var(--border);
   border-radius: 2px;
@@ -579,7 +586,7 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
   background: var(--bg-subtle);
   color: var(--ink-muted);
   border-top: 1px solid var(--border);
-  font-size: .8125rem;
+  font-size: var(--text-sm);
 }
 .site-footer p { margin: 0 0 .25rem; }
 .site-footer a { color: var(--accent-text); }
@@ -600,10 +607,9 @@ main > section:last-of-type { padding-bottom: 2.5rem; }
 @media (min-width: 48em) {
   :root { --gutter: 2rem; }
 
-  h1 { font-size: 2.125rem; }
-  h2 { font-size: 1.125rem; }
+  h1 { font-size: var(--text-2xl); }
 
-  .btn, .links a { min-height: 0; }
+  .btn, .links a { min-height: 2.5rem; }   /* pointer devices: comfortable, not thumb-sized */
 
   .site-header { padding-block: 3.5rem 2.5rem; }
 
